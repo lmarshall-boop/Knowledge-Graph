@@ -27,53 +27,65 @@ _HEADERS = {"User-Agent": "NeuroKnowledgeGraphExplorer/1.0 (https://github.com/l
 
 
 def fetch_pubmed_abstracts(query, max_results=15, email="your_email@example.com"):
-    """Search PubMed and return a list of {pmid, title, abstract} dicts.
+    """Search PubMed and return {"abstracts": [...], "total_count": int}.
 
-    Uses MEDLINE format (not the old blank-line-split hack) so each record's
-    PMID is parsed reliably -- that PMID is what lets the UI link every
-    extracted relationship back to its actual source citation.
+    `total_count` is PubMed's count of ALL matching records, not just the
+    ones pulled -- it's what lets the UI honestly say "searching across
+    12,482 PubMed records" instead of just "10 abstracts", since esearch
+    reports the full match count regardless of retmax.
+
+    Uses MEDLINE format (not a blank-line-split hack) so each record's PMID
+    is parsed reliably -- that PMID is what lets the UI link every extracted
+    relationship back to its actual source citation.
     """
     Entrez.email = email
     handle = Entrez.esearch(db="pubmed", term=query, retmax=max_results)
     record = Entrez.read(handle)
     handle.close()
     ids = record["IdList"]
+    total_count = int(record.get("Count", 0))
 
     if not ids:
-        return []
+        return {"abstracts": [], "total_count": total_count}
 
     handle = Entrez.efetch(db="pubmed", id=ids, rettype="medline", retmode="text")
     records = list(Medline.parse(handle))
     handle.close()
 
-    results = []
+    abstracts = []
     for rec in records:
         abstract = rec.get("AB", "").strip()
         if len(abstract) < 200:
             continue
-        results.append({
+        abstracts.append({
             "pmid": rec.get("PMID", ""),
             "title": rec.get("TI", "(untitled)"),
             "abstract": abstract,
         })
-    return results
+    return {"abstracts": abstracts, "total_count": total_count}
 
 
 def fetch_clinical_trials(query, max_results=10):
-    """Return active/recruiting ClinicalTrials.gov studies matching query."""
+    """Return {"trials": [...], "total_count": int} of matching ClinicalTrials.gov studies.
+
+    `total_count` (via countTotal=true) is the full count of registered
+    studies matching the term, not just the page pulled here.
+    """
     params = {
         "query.term": query,
         "pageSize": max_results,
+        "countTotal": "true",
         "fields": "NCTId,BriefTitle,OverallStatus,Phase,LeadSponsorName",
     }
     try:
         resp = requests.get(CLINICAL_TRIALS_API, params=params, headers=_HEADERS, timeout=10)
         resp.raise_for_status()
     except requests.RequestException:
-        return []
+        return {"trials": [], "total_count": 0}
 
+    payload = resp.json()
     trials = []
-    for study in resp.json().get("studies", []):
+    for study in payload.get("studies", []):
         protocol = study.get("protocolSection", {})
         ident = protocol.get("identificationModule", {})
         status = protocol.get("statusModule", {})
@@ -88,7 +100,7 @@ def fetch_clinical_trials(query, max_results=10):
             "sponsor": sponsor.get("name", "N/A"),
             "url": f"https://clinicaltrials.gov/study/{nct_id}" if nct_id else "",
         })
-    return trials
+    return {"trials": trials, "total_count": payload.get("totalCount", len(trials))}
 
 
 def fetch_wikipedia_summary(term):
