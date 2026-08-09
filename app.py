@@ -222,23 +222,108 @@ st.set_page_config(
     initial_sidebar_state="auto",
 )
 
+if "theme" not in st.session_state:
+    st.session_state.theme = "dark"
+
+# Two complete palettes, swapped by a handful of CSS custom properties --
+# everything else in the stylesheet below references these by name instead
+# of a literal hex value, so this dict is the only place a retheme happens.
+THEMES = {
+    "dark": {
+        "app_bg": "linear-gradient(160deg, #150F18 0%, #1c1420 100%)",
+        "panel": "#221826",
+        "nav_glass": "rgba(34,24,38,0.75)",
+        "text_primary": "#EBE4EC",
+        "text_secondary": "#A394A6",
+        "card_glass": "rgba(49,35,54,0.6)",
+        "card_border": "rgba(235,228,236,0.12)",
+        "border": "rgba(235,228,236,0.14)",
+        "accent": "#E88977",
+        "accent_2": "#A394A6",
+        "accent_deep": "#c96a58",
+        "accent_tint": "rgba(232,137,119,0.14)",
+        "accent_tint_border": "rgba(232,137,119,0.28)",
+        "accent_2_tint": "rgba(163,148,166,0.14)",
+        "accent_2_tint_border": "rgba(163,148,166,0.28)",
+        "btn_primary_bg": "#E88977",
+        "btn_primary_text": "#150F18",
+        "card_dark": "#312336",
+        "card_dark_border": "rgba(235,228,236,0.14)",
+        "card_dark_nested": "#3d2b42",
+        "card_dark_darkest": "#150F18",
+        "input_bg": "#221826",
+    },
+    "light": {
+        "app_bg": "linear-gradient(135deg, #fdf3ea 0%, #fbe1d5 45%, #ffd7bd 100%)",
+        "panel": "#fbe9df",
+        "nav_glass": "rgba(255,255,255,0.55)",
+        "text_primary": "#221530",
+        "text_secondary": "#4a3550",
+        "card_glass": "rgba(255,255,255,0.6)",
+        "card_border": "rgba(42,24,48,0.12)",
+        "border": "rgba(42,24,48,0.14)",
+        "accent": "#a4487f",
+        "accent_2": "#7a3f8f",
+        "accent_deep": "#7a3f8f",
+        "accent_tint": "rgba(164,72,127,0.14)",
+        "accent_tint_border": "rgba(164,72,127,0.28)",
+        "accent_2_tint": "rgba(122,63,143,0.14)",
+        "accent_2_tint_border": "rgba(122,63,143,0.28)",
+        "btn_primary_bg": "#221530",
+        "btn_primary_text": "#ffffff",
+        "card_dark": "#4A3043",
+        "card_dark_border": "#744F68",
+        "card_dark_nested": "#5C3D52",
+        "card_dark_darkest": "#3E2A38",
+        "input_bg": "#fffaf5",
+    },
+}
+# Constant regardless of theme: the hero-preview / explorer-results panel is
+# always a dark surface (in both modes), so text and the coral accent sitting
+# on top of it never need to flip.
+PANEL_TEXT = "#EBE4EC"
+PANEL_TEXT_MUTED = "#c9bcc7"
+PANEL_ACCENT = "#E88977"
+CHIP_TEXT = "#1a1420"  # dark text for legend chips / selected-tab, always on a bright accent bg
+
+t = THEMES[st.session_state.theme]
+
+st.markdown(f"""
+<style>
+:root {{
+    --app-bg: {t['app_bg']};
+    --panel: {t['panel']};
+    --nav-glass: {t['nav_glass']};
+    --text-primary: {t['text_primary']};
+    --text-secondary: {t['text_secondary']};
+    --card-glass: {t['card_glass']};
+    --card-border: {t['card_border']};
+    --border: {t['border']};
+    --accent: {t['accent']};
+    --accent-2: {t['accent_2']};
+    --accent-deep: {t['accent_deep']};
+    --accent-tint: {t['accent_tint']};
+    --accent-tint-border: {t['accent_tint_border']};
+    --accent-2-tint: {t['accent_2_tint']};
+    --accent-2-tint-border: {t['accent_2_tint_border']};
+    --btn-primary-bg: {t['btn_primary_bg']};
+    --btn-primary-text: {t['btn_primary_text']};
+    --card-dark: {t['card_dark']};
+    --card-dark-border: {t['card_dark_border']};
+    --card-dark-nested: {t['card_dark_nested']};
+    --card-dark-darkest: {t['card_dark_darkest']};
+    --input-bg: {t['input_bg']};
+    --panel-text: {PANEL_TEXT};
+    --panel-text-muted: {PANEL_TEXT_MUTED};
+    --panel-accent: {PANEL_ACCENT};
+    --chip-text: {CHIP_TEXT};
+}}
+</style>
+""", unsafe_allow_html=True)
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=Roboto+Condensed:wght@400;500;600;700&display=swap');
-
-:root {
-    /* Deep Aubergine palette -- swap these six values to retheme the whole app. */
-    --bg: #150F18;
-    --panel: #221826;       /* sidebar, nav */
-    --card: #312336;        /* cards, graph box */
-    --card-nested: #3d2b42; /* chips/stat-boxes sitting inside a dark-panel */
-    --text-primary: #EBE4EC;
-    --text-secondary: #A394A6;
-    --accent: #E88977;
-    --accent-deep: #c96a58;
-    --border: rgba(235,228,236,0.14);
-    --border-soft: rgba(235,228,236,0.12);
-}
 
 html, body, .stApp { font-family: 'Inter', sans-serif; }
 a { color: var(--accent); text-decoration: none; }
@@ -251,7 +336,7 @@ a:hover { color: #f0a494; text-decoration: underline; }
 }
 
 .stApp {
-    background: linear-gradient(160deg, var(--bg) 0%, #1c1420 100%);
+    background: var(--app-bg);
 }
 
 [data-testid="stSidebar"] { background: var(--panel); }
@@ -260,17 +345,18 @@ a:hover { color: #f0a494; text-decoration: underline; }
 
 /* Native text inputs don't automatically follow this page's custom palette --
    without this, they fall back to the browser/Streamlit-theme default, which
-   can render as illegible dark-on-dark if the viewer's system is already in
-   dark mode. Forced explicitly so it never depends on config.toml alone. */
+   can render as illegible dark-on-dark (or light-on-light) depending on the
+   viewer's system preference. Forced explicitly so it never depends on
+   config.toml alone. */
 .stTextInput input, .stTextArea textarea, .stNumberInput input {
-    background-color: var(--panel) !important;
+    background-color: var(--input-bg) !important;
     color: var(--text-primary) !important;
     border: 1px solid var(--border) !important;
 }
 .stTextInput input::placeholder, .stTextArea textarea::placeholder { color: var(--text-secondary) !important; }
 
 .st-key-navbar {
-    background: rgba(34,24,38,0.75); backdrop-filter: blur(8px);
+    background: var(--nav-glass); backdrop-filter: blur(8px);
     border: 1px solid var(--border); border-radius: 999px;
     padding: 0.5rem 0.9rem; margin: 0.5rem 0 1.75rem;
 }
@@ -289,34 +375,34 @@ a:hover { color: #f0a494; text-decoration: underline; }
 .hero-grid p.subhead { margin: 1.1rem 0 0; font-size: 1.02rem; line-height: 1.62; color: var(--text-secondary); max-width: 36rem; }
 
 .dark-panel {
-    background: var(--card); border: 1px solid var(--border); border-radius: 22px;
+    background: var(--card-dark); border: 1px solid var(--card-dark-border); border-radius: 22px;
     padding: 1.4rem; box-shadow: 0 10px 18px rgba(0,0,0,0.35);
 }
 .dark-panel .panel-kicker {
     font-family: 'Roboto Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--accent); margin-bottom: 0.7rem;
+    text-transform: uppercase; color: var(--panel-accent); margin-bottom: 0.7rem;
 }
 
 .badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.8rem 0 1.6rem; }
 .trust-badge {
     font-family: 'Roboto Condensed', sans-serif;
-    background: rgba(49,35,54,0.6); border: 1px solid var(--border-soft);
+    background: var(--card-glass); border: 1px solid var(--card-border);
     color: var(--text-primary); padding: 0.32rem 0.85rem; border-radius: 999px; font-size: 0.8rem; white-space: nowrap;
 }
 
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin-bottom: 1.8rem; }
 .glass-card {
-    background: rgba(49,35,54,0.6); backdrop-filter: blur(6px);
-    border: 1px solid var(--border-soft); border-radius: 16px; padding: 1.2rem 1.3rem;
+    background: var(--card-glass); backdrop-filter: blur(6px);
+    border: 1px solid var(--card-border); border-radius: 16px; padding: 1.2rem 1.3rem;
 }
 .card-num {
-    width: 38px; height: 38px; border-radius: 50%; background: rgba(232,137,119,0.14);
-    border: 1px solid rgba(232,137,119,0.28); display: flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px; border-radius: 50%; background: var(--accent-tint);
+    border: 1px solid var(--accent-tint-border); display: flex; align-items: center; justify-content: center;
     font-family: 'Roboto Condensed', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent);
     margin-bottom: 0.7rem;
 }
-.card-num.cool { background: rgba(163,148,166,0.14); border-color: rgba(163,148,166,0.28); color: var(--text-secondary); }
-.card-num.warm { background: rgba(232,137,119,0.14); border-color: rgba(232,137,119,0.28); color: var(--accent); }
+.card-num.cool { background: var(--accent-2-tint); border-color: var(--accent-2-tint-border); color: var(--accent-2); }
+.card-num.warm { background: var(--accent-tint); border-color: var(--accent-tint-border); color: var(--accent); }
 .glass-card .card-kicker { font-family: 'Poppins', sans-serif; font-size: 0.76rem; font-weight: 600; color: var(--accent); }
 .glass-card h4 { font-family: 'Poppins', sans-serif; margin: 0.35rem 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: var(--text-primary); }
 .glass-card p { margin: 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.55; }
@@ -324,33 +410,33 @@ a:hover { color: #f0a494; text-decoration: underline; }
 
 .preset-chip {
     font-family: 'Roboto Condensed', sans-serif; font-size: 0.76rem;
-    background: var(--card-nested); border: 1px solid var(--border);
-    padding: 0.3rem 0.75rem; color: var(--text-primary);
+    background: var(--card-dark-nested); border: 1px solid var(--card-dark-border);
+    padding: 0.3rem 0.75rem; color: var(--panel-text);
 }
-.stat-box { background: var(--card-nested); border: 1px solid var(--border); border-radius: 14px; padding: 0.85rem 1rem; }
-.stat-box .stat-num { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--accent); }
-.stat-box .stat-label { font-family: 'Roboto Condensed', sans-serif; font-size: 0.76rem; color: var(--text-primary); opacity: 0.82; margin-top: 0.2rem; }
+.stat-box { background: var(--card-dark-nested); border: 1px solid var(--card-dark-border); border-radius: 14px; padding: 0.85rem 1rem; }
+.stat-box .stat-num { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--panel-accent); }
+.stat-box .stat-label { font-family: 'Roboto Condensed', sans-serif; font-size: 0.76rem; color: var(--panel-text); opacity: 0.82; margin-top: 0.2rem; }
 .stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.75rem; margin-bottom: 1.2rem; }
 
 .legend-chip {
     font-family: 'Roboto Condensed', sans-serif; font-weight: 600;
     display: inline-block; padding: 0.18rem 0.7rem; border-radius: 999px;
-    color: #1a1420; font-size: 0.78rem; margin-right: 0.4rem; margin-bottom: 0.3rem;
+    color: var(--chip-text); font-size: 0.78rem; margin-right: 0.4rem; margin-bottom: 0.3rem;
 }
 .mono-note {
-    background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 0.9rem 1.1rem;
-    font-family: ui-monospace, monospace; font-size: 0.78rem; color: var(--text-secondary);
+    background: var(--card-dark-darkest); border: 1px solid var(--card-dark-border); border-radius: 14px; padding: 0.9rem 1.1rem;
+    font-family: ui-monospace, monospace; font-size: 0.78rem; color: var(--panel-text-muted);
 }
-.dark-panel .wiki-blurb { color: var(--text-primary); font-size: 0.92rem; line-height: 1.55; margin-bottom: 1.1rem; }
-.dark-panel .wiki-blurb a { color: var(--accent); }
+.dark-panel .wiki-blurb { color: var(--panel-text); font-size: 0.92rem; line-height: 1.55; margin-bottom: 1.1rem; }
+.dark-panel .wiki-blurb a { color: var(--panel-accent); }
 
 .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.75rem; margin-bottom: 2rem; }
 .tech-card {
-    background: rgba(49,35,54,0.6); border: 1px solid var(--border-soft); border-radius: 12px;
+    background: var(--card-glass); border: 1px solid var(--card-border); border-radius: 12px;
     padding: 0.8rem 1rem;
 }
 .tech-card.warm { border-left: 3px solid var(--accent); }
-.tech-card.cool { border-left: 3px solid var(--text-secondary); }
+.tech-card.cool { border-left: 3px solid var(--accent-2); }
 .tech-card .tech-name { font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--text-primary); font-size: 0.92rem; }
 .tech-card .tech-role { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem; line-height: 1.4; }
 
@@ -381,31 +467,36 @@ a:hover { color: #f0a494; text-decoration: underline; }
 .site-footer .footer-meta { display: flex; align-items: center; gap: 0.9rem; font-family: 'Roboto Condensed', sans-serif; font-size: 0.85rem; color: var(--text-secondary); flex-wrap: wrap; }
 .site-footer .footer-meta a { display: inline-flex; align-items: center; gap: 0.4rem; }
 
-[data-testid="stMetric"] { background: rgba(235,228,236,0.06); padding: 0.75rem 1rem; border-radius: 10px; }
+[data-testid="stMetric"] { background: var(--card-glass); padding: 0.75rem 1rem; border-radius: 10px; }
 [data-testid="stMetricValue"] { color: var(--text-primary) !important; }
 [data-testid="stMetricLabel"] { color: var(--text-secondary) !important; }
 
 .stButton > button, .stLinkButton > a { border-radius: 999px; font-family: 'Roboto Condensed', sans-serif; font-weight: 600; }
-.stButton > button[kind="primary"] { background: var(--accent); color: var(--bg); border: none; }
-.stButton > button[kind="primary"]:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(232,137,119,0.35); }
+.stButton > button[kind="primary"] { background: var(--btn-primary-bg); color: var(--btn-primary-text); border: none; }
+.stButton > button[kind="primary"]:hover { transform: translateY(-2px); filter: brightness(1.08); }
 .stButton > button[kind="secondary"], .stLinkButton > a[kind="secondary"] {
     background: transparent; color: var(--text-primary); border: 1px solid var(--border);
 }
-.stButton > button[kind="secondary"]:hover, .stLinkButton > a[kind="secondary"]:hover { background: rgba(235,228,236,0.08); }
+.stButton > button[kind="secondary"]:hover, .stLinkButton > a[kind="secondary"]:hover { background: var(--card-glass); }
 
 .st-key-preset_chips .stButton > button {
-    background: var(--card-nested); border: 1px solid var(--border); color: var(--text-primary);
+    background: var(--card-dark-nested); border: 1px solid var(--card-dark-border); color: var(--panel-text);
     font-size: 0.78rem; padding: 0.3rem 0.7rem;
 }
-.st-key-preset_chips .stButton > button:hover { background: #4a3550; }
+.st-key-preset_chips .stButton > button:hover { filter: brightness(1.2); }
+
+.st-key-theme_toggle .stButton > button {
+    background: transparent; border: 1px solid var(--border); color: var(--text-primary);
+    font-size: 0.82rem; padding: 0.5rem 1rem;
+}
 
 [data-baseweb="tab-list"] { gap: 6px; }
 [data-baseweb="tab"] {
     font-family: 'Roboto Condensed', sans-serif !important; font-weight: 600 !important;
-    border-radius: 999px !important; background: var(--card-nested) !important; border: 1px solid var(--border) !important;
-    color: var(--text-primary) !important; padding: 0.4rem 0.95rem !important;
+    border-radius: 999px !important; background: var(--card-dark-nested) !important; border: 1px solid var(--card-dark-border) !important;
+    color: var(--panel-text) !important; padding: 0.4rem 0.95rem !important;
 }
-[data-baseweb="tab"][aria-selected="true"] { background: var(--accent) !important; border-color: var(--accent) !important; color: var(--bg) !important; }
+[data-baseweb="tab"][aria-selected="true"] { background: var(--panel-accent) !important; border-color: var(--panel-accent) !important; color: var(--chip-text) !important; }
 [data-baseweb="tab-highlight"], [data-baseweb="tab-border"] { display: none !important; }
 
 @media (max-width: 768px) {
@@ -555,8 +646,8 @@ with st.sidebar:
 
 # ---- Top nav --------------------------------------------------------------
 with st.container(key="navbar"):
-    nav_logo, nav_brand, nav_home, nav_components, nav_spacer, nav_source = st.columns(
-        [0.4, 1.6, 0.9, 1.3, 2.0, 1.5], vertical_alignment="center"
+    nav_logo, nav_brand, nav_home, nav_components, nav_spacer, nav_theme, nav_source = st.columns(
+        [0.4, 1.5, 0.85, 1.2, 1.3, 1.1, 1.4], vertical_alignment="center"
     )
     with nav_logo:
         st.markdown(LOGO_SVG, unsafe_allow_html=True)
@@ -575,6 +666,12 @@ with st.container(key="navbar"):
                       width="stretch"):
             st.session_state.page = "Components"
             st.rerun()
+    with nav_theme:
+        with st.container(key="theme_toggle"):
+            next_theme = "light" if st.session_state.theme == "dark" else "dark"
+            if st.button(f"{next_theme.capitalize()} mode", key="theme_toggle_btn", width="stretch"):
+                st.session_state.theme = next_theme
+                st.rerun()
     with nav_source:
         st.link_button("View source", "https://github.com/lmarshall-boop/Knowledge-Graph", width="stretch")
 
@@ -767,7 +864,7 @@ else:
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="section-kicker" style="color:#E88977;">The pipeline &mdash; scroll to reveal</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker" style="color:var(--accent);">The pipeline &mdash; scroll to reveal</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="card-grid">' + "".join(
             f'<div class="glass-card pipeline-card"><div class="card-num {"cool" if i % 2 else "warm"}">{num}</div>'
@@ -777,7 +874,7 @@ else:
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="section-kicker" style="color:#A394A6;">Built with</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker" style="color:var(--accent-2);">Built with</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="tech-grid">' + "".join(
             f'<div class="tech-card {"cool" if i % 2 else "warm"}"><div class="tech-name">{name}</div>'
@@ -787,7 +884,7 @@ else:
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="section-kicker" style="color:#E88977;">Where the data comes from</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker" style="color:var(--accent);">Where the data comes from</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="card-grid">' + "".join(
             f'<div class="glass-card"><h4>{name}</h4><p>{desc}</p>'
