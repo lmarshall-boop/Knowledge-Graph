@@ -30,41 +30,26 @@ DISEASE_PRESETS = [
     ("Lewy body dementia", "Lewy body dementia"),
 ]
 
-# Simple line-art icon paths (24x24 viewBox), reused across trust badges and
-# home cards so the whole app draws from one small, consistent icon set
-# instead of mismatched emoji.
-ICON_BOOK = '<path d="M4 4.5c2-1 5-1 7 0v15c-2-1-5-1-7 0z"/><path d="M20 4.5c-2-1-5-1-7 0v15c2-1 5-1 7 0z"/>'
-ICON_FLASK = '<path d="M9 3h6"/><path d="M10 3v6l-5.3 9.2A1.8 1.8 0 0 0 6.3 21h11.4a1.8 1.8 0 0 0 1.6-2.8L14 9V3"/>'
-ICON_LINK = '<path d="M9 15l6-6"/><path d="M11 6l.9-.9a3.5 3.5 0 0 1 5 5l-1 1"/><path d="M13 18l-.9.9a3.5 3.5 0 0 1-5-5l1-1"/>'
-ICON_EYE = '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>'
-ICON_SEARCH = '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>'
-
-
-def svg_icon(paths, css_class="badge-icon"):
-    return (f'<svg class="{css_class}" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
-            f'stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">{paths}</svg>')
-
-
 TRUST_BADGES = [
-    (ICON_BOOK, "Straight from PubMed"),
-    (ICON_FLASK, "Trials, not just papers"),
-    (ICON_LINK, "Every edge cites its source"),
-    (ICON_EYE, "See exactly how it works"),
+    "Straight from PubMed",
+    "Trials, not just papers",
+    "Every edge cites its source",
+    "See exactly how it works",
 ]
 
 WHY_CARDS = [
-    (ICON_SEARCH, "Why it matters", "Research is scattered",
+    ("Why it matters", "Research is scattered",
      "Findings on a disease like Alzheimer's or ALS live in thousands of separate papers, "
      "and nobody has time to read them all. NeuroLoom pulls the threads together so you can "
      "see how they connect."),
-    (ICON_LINK, "Built on primary sources", "Every claim is traceable",
+    ("Built on primary sources", "Every claim is traceable",
      "Every abstract comes straight from PubMed, every trial from ClinicalTrials.gov. Click "
      "through any relationship in the graph and you land on the actual PMID it came from, "
      "not a black box."),
-    (ICON_EYE, "Data driven, transparent", "The method is visible",
+    ("Data driven, transparent", "The method is visible",
      "spaCy reads the grammar of each sentence to spot who's doing what to whom, then checks "
      "it against a biomedical glossary. If a paper reports X does <em>not</em> cause Y, that "
-     "gets flagged, not smoothed over. Full pipeline is on the <strong>Components</strong> page."),
+     "gets flagged, not smoothed over."),
 ]
 
 PIPELINE_STEPS = [
@@ -100,6 +85,130 @@ DATA_SOURCES = [
      "https://en.wikipedia.org/api/rest_v1/"),
 ]
 
+# ---- Decorative assets (ported/adapted from NeuroLoom Redesign.dc.html) ----
+
+LOGO_SVG = (
+    '<svg width="30" height="30" viewBox="0 0 34 34">'
+    '<defs><linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">'
+    '<stop offset="0" stop-color="#c9558f"/><stop offset="1" stop-color="#7a3f8f"/></linearGradient></defs>'
+    '<path d="M9 9 L17 15 L25 8" stroke="url(#logoGrad)" stroke-width="1.6" fill="none"/>'
+    '<path d="M9 25 L17 19 L25 26" stroke="url(#logoGrad)" stroke-width="1.6" fill="none"/>'
+    '<path d="M17 15 L17 19" stroke="url(#logoGrad)" stroke-width="1.6" fill="none"/>'
+    '<circle cx="9" cy="9" r="3" fill="url(#logoGrad)"/><circle cx="25" cy="8" r="2.4" fill="url(#logoGrad)"/>'
+    '<circle cx="17" cy="15" r="3.4" fill="url(#logoGrad)"/><circle cx="17" cy="19" r="3.4" fill="url(#logoGrad)"/>'
+    '<circle cx="9" cy="25" r="2.4" fill="url(#logoGrad)"/><circle cx="25" cy="26" r="3" fill="url(#logoGrad)"/>'
+    '</svg>'
+)
+
+INSTAGRAM_SVG = (
+    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'
+    '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/>'
+    '<circle cx="17.2" cy="6.8" r="1"/></svg>'
+)
+
+HERO_GRAPH_SVG = """<svg viewBox="0 0 400 250" style="width:100%;display:block">
+  <line x1="70" y1="60" x2="180" y2="120" stroke="#a89ab0" stroke-width="1.5"/>
+  <line x1="180" y1="120" x2="120" y2="205" stroke="#a89ab0" stroke-width="1.5"/>
+  <line x1="260" y1="45" x2="180" y2="120" stroke="#e8746b" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <line x1="180" y1="120" x2="300" y2="150" stroke="#a89ab0" stroke-width="1.5"/>
+  <line x1="300" y1="150" x2="340" y2="215" stroke="#a89ab0" stroke-width="1.5"/>
+  <line x1="70" y1="60" x2="260" y2="45" stroke="#a89ab0" stroke-width="1.5"/>
+  <circle cx="70" cy="60" r="9" fill="#6ba5e8"/>
+  <circle cx="260" cy="45" r="9" fill="#e8746b"/>
+  <circle cx="180" cy="120" r="11" fill="#b38ce8"/>
+  <circle cx="300" cy="150" r="8" fill="#d9b45c"/>
+  <circle cx="120" cy="205" r="8" fill="#b38ce8"/>
+  <circle cx="340" cy="215" r="8" fill="#7fd18f"/>
+  <text x="70" y="42" fill="#FDFBF7" font-size="10" font-family="Roboto Condensed" text-anchor="middle">amyloid-beta</text>
+  <text x="260" y="30" fill="#FDFBF7" font-size="10" font-family="Roboto Condensed" text-anchor="middle">alzheimer's disease</text>
+  <text x="180" y="140" fill="#FDFBF7" font-size="10" font-family="Roboto Condensed" text-anchor="middle">neuroinflammation</text>
+  <text x="300" y="135" fill="#FDFBF7" font-size="10" font-family="Roboto Condensed" text-anchor="middle">hippocampus</text>
+  <text x="120" y="222" fill="#FDFBF7" font-size="10" font-family="Roboto Condensed" text-anchor="middle">apoptosis</text>
+  <text x="340" y="232" fill="#FDFBF7" font-size="10" font-family="Roboto Condensed" text-anchor="middle">donepezil</text>
+</svg>"""
+
+
+def _mulberry32(seed):
+    """Port of the mockup's JS PRNG (identical algorithm, 32-bit wraparound
+    arithmetic) so the decorative neuron field matches the design file
+    exactly instead of just approximately."""
+    state = seed & 0xFFFFFFFF
+
+    def next_val():
+        nonlocal state
+        state = (state + 0x6D2B79F5) & 0xFFFFFFFF
+        t1 = ((state ^ (state >> 15)) * (1 | state)) & 0xFFFFFFFF
+        inner = ((t1 ^ (t1 >> 7)) * (61 | t1)) & 0xFFFFFFFF
+        t2 = ((t1 + inner) & 0xFFFFFFFF) ^ t1
+        result = (t2 ^ (t2 >> 14)) & 0xFFFFFFFF
+        return result / 4294967296
+
+    return next_val
+
+
+def _build_neuron_field():
+    rand = _mulberry32(7)
+    node_colors = ["#7a3f8f", "#a4487f", "#E07A5F", "#c9558f"]
+    nodes = []
+    for _ in range(28):
+        nodes.append({
+            "x": round(rand() * 1200), "y": round(rand() * 1400),
+            "r": round(1.6 + rand() * 2.4, 1),
+            "color": node_colors[int(rand() * len(node_colors))],
+        })
+    lines = []
+    for n in nodes:
+        link_count = 1 + int(rand() * 2)
+        for _ in range(link_count):
+            other = nodes[int(rand() * len(nodes))]
+            if other is not n:
+                lines.append({"x1": n["x"], "y1": n["y"], "x2": other["x"], "y2": other["y"], "color": n["color"]})
+    return nodes, lines
+
+
+def _render_background_decoration():
+    nodes, lines = _build_neuron_field()
+    lines_svg = "".join(
+        f'<line x1="{l["x1"]}" y1="{l["y1"]}" x2="{l["x2"]}" y2="{l["y2"]}" stroke="{l["color"]}" stroke-width="1.3"/>'
+        for l in lines
+    )
+    nodes_svg = "".join(
+        f'<circle cx="{n["x"]}" cy="{n["y"]}" r="{n["r"]}" fill="{n["color"]}"/>'
+        for n in nodes
+    )
+    loop_radii = [60, 105, 150, 195, 240, 285, 330, 375, 420]
+    rings_svg = "".join(
+        f'<circle cx="60" cy="580" r="{r}" fill="none" stroke="url(#loopGrad)" '
+        f'stroke-width="22" opacity="{max(0.95 - i * 0.07, 0.05):.2f}"/>'
+        for i, r in enumerate(loop_radii)
+    )
+
+    # Deliberately NOT anchored via .stApp{{position:relative}}: Streamlit relies on
+    # its own positioning for .stApp's viewport-fill sizing, and overriding it
+    # collapses the whole app to zero height (confirmed by testing). Anchoring to
+    # the initial containing block instead means this covers a fixed span of the
+    # page (~2400px) rather than dynamically matching exact content height, which
+    # is an acceptable tradeoff for a low-opacity decorative layer.
+    return f"""
+    <div style="position:absolute;top:0;left:0;width:100%;height:2400px;pointer-events:none;z-index:0;overflow:hidden">
+      <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.14"
+           viewBox="0 0 1200 1400" preserveAspectRatio="xMidYMid slice">{lines_svg}{nodes_svg}</svg>
+      <div style="position:absolute;top:-220px;right:-220px;width:620px;height:620px;border-radius:50%;
+           background:radial-gradient(circle,rgba(255,157,92,0.4),transparent 70%);filter:blur(18px);
+           animation:blobDrift 14s ease-in-out infinite"></div>
+      <svg style="position:absolute;bottom:-160px;left:-160px;width:640px;height:640px" viewBox="0 0 640 640">
+        <defs><linearGradient id="loopGrad" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0" stop-color="#3f1f4a"/><stop offset="0.4" stop-color="#a13f7a"/>
+          <stop offset="0.75" stop-color="#ec6f6f"/><stop offset="1" stop-color="#ff9d5c"/>
+        </linearGradient></defs>
+        {rings_svg}
+        <path d="M60 580 L60 480 M60 580 L140 520 M60 580 L20 490" stroke="#fff" stroke-width="1.4" opacity="0.5" fill="none"/>
+        <circle cx="60" cy="580" r="10" fill="#fff" opacity="0.8"/>
+      </svg>
+    </div>
+    """
+
+
 # ---- Page setup & styling --------------------------------------------
 st.set_page_config(
     page_title="NeuroLoom",
@@ -110,147 +219,171 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&family=Roboto+Condensed:wght@400;500;600;700&family=Roboto+Slab:wght@700;800&family=Baloo+2:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=Roboto+Condensed:wght@400;500;600;700&display=swap');
 
 html, body, .stApp { font-family: 'Inter', sans-serif; }
+a { color: #a4487f; text-decoration: none; }
+a:hover { color: #c9558f; text-decoration: underline; }
+
+@keyframes blobDrift {
+    0% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(18px,-14px) scale(1.05); }
+    100% { transform: translate(0,0) scale(1); }
+}
 
 .stApp {
-    background: linear-gradient(160deg, #2f1b4d 0%, #47295f 45%, #6b3f8f 100%);
+    background: linear-gradient(135deg, #fdf3ea 0%, #fbe1d5 45%, #ffd7bd 100%);
 }
+
+[data-testid="stSidebar"] { background: #fbe9df; }
+[data-testid="stSidebar"] * { color: #2a1830; }
+[data-testid="stSidebar"] .disclaimer { color: #6b5566 !important; }
 
 .st-key-navbar {
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.14);
-    border-radius: 999px;
-    padding: 0.4rem 1.25rem;
-    margin-bottom: 1.5rem;
+    background: rgba(255,255,255,0.55); backdrop-filter: blur(8px);
+    border: 1px solid rgba(42,24,48,0.14); border-radius: 999px;
+    padding: 0.5rem 0.9rem; margin: 0.5rem 0 1.75rem;
 }
-.topnav-brand {
-    font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.35rem;
-    color: #ffffff;
-}
-
-.hero {
-    background: linear-gradient(135deg, #fdf3ea 0%, #fbdfe6 50%, #ffd7bd 100%);
-    padding: 2.25rem 2.25rem;
-    border-radius: 22px;
-    color: #241b2e;
-    margin-bottom: 1rem;
-    box-shadow: 0 16px 40px rgba(20, 10, 35, 0.35);
-}
-.hero h1 {
-    margin: 0; font-size: clamp(1.6rem, 3.4vw, 2.5rem); line-height: 1.15;
-    font-family: 'Roboto Slab', serif; font-weight: 800; color: #221830;
-}
-.hero p.subhead { margin: 0.75rem 0 0 0; opacity: 0.85; font-size: clamp(0.92rem, 1.6vw, 1.05rem); max-width: 46rem; color: #362a44; }
-
-.page-title {
-    font-family: 'Roboto Slab', serif; font-weight: 800; color: #ffffff;
-    font-size: clamp(1.4rem, 3vw, 2.05rem); margin: 0.25rem 0 0.35rem 0;
-}
-.page-subtitle { color: #e9def0; opacity: 0.85; font-size: 0.95rem; max-width: 46rem; margin-bottom: 1.5rem; }
-.section-kicker {
-    font-family: 'Roboto Condensed', sans-serif; font-size: 0.78rem; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.6rem;
+.topnav-brand { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.35rem; letter-spacing: -0.02em; }
+.topnav-brand .neuro { color: #221530; }
+.topnav-brand .loom {
+    background: linear-gradient(120deg, #c9558f, #7a3f8f);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 
-.badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0 1.6rem 0; }
+.hero-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 2rem; align-items: center; margin: 1rem 0 2rem; }
+.hero-grid h1 {
+    margin: 0; font-family: 'Inter', sans-serif; font-weight: 800;
+    font-size: clamp(1.9rem, 3.6vw, 2.7rem); line-height: 1.14; letter-spacing: -0.02em; color: #221530;
+}
+.hero-grid p.subhead { margin: 1.1rem 0 0; font-size: 1.02rem; line-height: 1.62; color: #4a3550; max-width: 36rem; }
+
+.dark-panel {
+    background: #4A3043; border: 1px solid #744F68; border-radius: 22px;
+    padding: 1.4rem; box-shadow: 0 10px 18px rgba(42,24,48,0.32);
+}
+.dark-panel .panel-kicker {
+    font-family: 'Roboto Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #E07A5F; margin-bottom: 0.7rem;
+}
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.8rem 0 1.6rem; }
 .trust-badge {
     font-family: 'Roboto Condensed', sans-serif;
-    display: inline-flex; align-items: center; gap: 0.4rem;
-    background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.22);
-    color: #fdf6ff;
-    padding: 0.32rem 0.85rem 0.32rem 0.65rem; border-radius: 999px; font-size: 0.8rem; white-space: nowrap;
+    background: rgba(255,255,255,0.6); border: 1px solid rgba(42,24,48,0.15);
+    color: #2a1830; padding: 0.32rem 0.85rem; border-radius: 999px; font-size: 0.8rem; white-space: nowrap;
 }
-.badge-icon { width: 15px; height: 15px; flex-shrink: 0; }
 
-.card-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 0.9rem; margin-bottom: 1.6rem;
-}
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin-bottom: 1.8rem; }
 .glass-card {
-    background: rgba(255,255,255,0.08); backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,0.16); border-radius: 16px;
-    padding: 1.1rem 1.2rem;
+    background: rgba(255,255,255,0.6); backdrop-filter: blur(6px);
+    border: 1px solid rgba(42,24,48,0.12); border-radius: 16px; padding: 1.2rem 1.3rem;
 }
-.card-icon {
-    width: 38px; height: 38px; border-radius: 50%;
-    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.05rem; font-family: 'Roboto Condensed', sans-serif; font-weight: 700;
-    color: #ffd7bd; margin-bottom: 0.6rem;
+.card-num {
+    width: 38px; height: 38px; border-radius: 50%; background: rgba(122,63,143,0.12);
+    border: 1px solid rgba(122,63,143,0.2); display: flex; align-items: center; justify-content: center;
+    font-family: 'Roboto Condensed', sans-serif; font-weight: 700; font-size: 0.95rem; color: #7a3f8f;
+    margin-bottom: 0.7rem;
 }
-.card-icon.teal { color: #8fe9dc; background: rgba(143,233,220,0.14); border-color: rgba(143,233,220,0.32); }
-.card-icon svg { width: 18px; height: 18px; }
-.glass-card .card-kicker { font-family: 'Roboto Condensed', sans-serif; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: #e7d3f0; opacity: 0.8; }
-.glass-card h4 { font-family: 'Poppins', sans-serif; margin: 0.3rem 0 0.5rem 0; font-size: 1.02rem; font-weight: 600; color: #ffffff; }
-.glass-card p { margin: 0; font-size: 0.87rem; color: #f1e9f6; opacity: 0.92; line-height: 1.5; }
-.glass-card a { color: #ffd7bd; }
+.card-num.cool { background: rgba(122,63,143,0.14); color: #7a3f8f; }
+.card-num.warm { background: rgba(164,72,127,0.14); color: #a4487f; }
+.glass-card .card-kicker { font-family: 'Poppins', sans-serif; font-size: 0.76rem; font-weight: 600; color: #a4487f; }
+.glass-card h4 { font-family: 'Poppins', sans-serif; margin: 0.35rem 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #221530; }
+.glass-card p { margin: 0; font-size: 0.9rem; color: #4a3550; line-height: 1.55; }
 
-.tech-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 0.75rem; margin-bottom: 1.6rem;
+.preset-chip {
+    font-family: 'Roboto Condensed', sans-serif; font-size: 0.76rem;
+    background: #5C3D52; border: 1px solid #744F68; border-radius: 999px;
+    padding: 0.3rem 0.75rem; color: #FDFBF7;
 }
-.tech-card {
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
-    border-left: 3px solid #ffd7bd;
-    border-radius: 12px; padding: 0.8rem 1rem;
-}
-.tech-card.teal { border-left-color: #8fe9dc; }
-.tech-card .tech-name { font-family: 'Poppins', sans-serif; font-weight: 600; color: #ffffff; font-size: 0.92rem; }
-.tech-card .tech-role { font-size: 0.8rem; color: #e9def0; opacity: 0.85; margin-top: 0.2rem; line-height: 1.4; }
-
-.stat-strip {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.75rem; margin: 0.5rem 0 1.2rem 0;
-}
-.stat-box {
-    background: rgba(255,255,255,0.08); border: 1px solid rgba(255, 175, 130, 0.35);
-    border-radius: 14px; padding: 0.85rem 1rem;
-}
-.stat-box .stat-num { font-family: 'Roboto Slab', serif; font-size: 1.55rem; font-weight: 700; line-height: 1.1; color: #ffb385; }
-.stat-box .stat-label { font-family: 'Roboto Condensed', sans-serif; font-size: 0.78rem; color: #f1e9f6; opacity: 0.8; margin-top: 0.2rem; }
-
-.fun-badge {
-    width: 78px; height: 78px; border-radius: 50%; flex-shrink: 0;
-    background: linear-gradient(135deg, #8ff0e3, #34b3a5);
-    color: #072421; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 0.72rem; text-align: center; line-height: 1.3;
-    transform: rotate(-7deg);
-    box-shadow: 0 10px 22px rgba(52,179,165,0.35);
-}
-.fun-badge .fun-badge-big { font-size: 1.1rem; }
+.stat-box { background: #5C3D52; border: 1px solid #744F68; border-radius: 14px; padding: 0.85rem 1rem; }
+.stat-box .stat-num { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: #E07A5F; }
+.stat-box .stat-label { font-family: 'Roboto Condensed', sans-serif; font-size: 0.76rem; color: #FDFBF7; opacity: 0.82; margin-top: 0.2rem; }
+.stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.75rem; margin-bottom: 1.2rem; }
 
 .legend-chip {
-    font-family: 'Roboto Condensed', sans-serif;
-    display: inline-block; padding: 0.15rem 0.65rem; border-radius: 999px;
-    color: white; font-size: 0.8rem; margin-right: 0.4rem; margin-bottom: 0.3rem;
+    font-family: 'Roboto Condensed', sans-serif; font-weight: 600;
+    display: inline-block; padding: 0.18rem 0.7rem; border-radius: 999px;
+    color: #1a1420; font-size: 0.78rem; margin-right: 0.4rem; margin-bottom: 0.3rem;
 }
-.disclaimer {
-    font-size: 0.8rem; color: #d9cde3; border-top: 1px solid rgba(255,255,255,0.15);
-    padding-top: 0.75rem; margin-top: 1.5rem;
+.mono-note {
+    background: #3E2A38; border: 1px solid #744F68; border-radius: 14px; padding: 0.9rem 1.1rem;
+    font-family: ui-monospace, monospace; font-size: 0.78rem; color: #d8c7d3;
 }
-[data-testid="stMetric"] {
-    background: rgba(255,255,255,0.06); padding: 0.75rem 1rem; border-radius: 10px;
+.dark-panel .wiki-blurb { color: #f1e6ee; font-size: 0.92rem; line-height: 1.55; margin-bottom: 1.1rem; }
+.dark-panel .wiki-blurb a { color: #ffb385; }
+
+.tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.75rem; margin-bottom: 2rem; }
+.tech-card {
+    background: rgba(255,255,255,0.6); border: 1px solid rgba(42,24,48,0.12); border-radius: 12px;
+    padding: 0.8rem 1rem;
 }
+.tech-card.warm { border-left: 3px solid #a4487f; }
+.tech-card.cool { border-left: 3px solid #7a3f8f; }
+.tech-card .tech-name { font-family: 'Poppins', sans-serif; font-weight: 700; color: #221530; font-size: 0.92rem; }
+.tech-card .tech-role { font-size: 0.8rem; color: #4a3550; margin-top: 0.2rem; line-height: 1.4; }
+
+.page-title { font-family: 'Poppins', sans-serif; font-weight: 800; color: #221530; font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 1rem 0 0.4rem; letter-spacing: -0.02em; }
+.page-subtitle { color: #4a3550; font-size: 0.95rem; max-width: 46rem; margin-bottom: 1.8rem; }
+.section-kicker { font-family: 'Poppins', sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 0.7rem; }
+
+.pipeline-card { opacity: 1; transform: translateY(0); }
+@supports (animation-timeline: view()) {
+    .pipeline-card {
+        animation: pipelineReveal linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 25%;
+    }
+}
+@keyframes pipelineReveal {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.disclaimer { font-size: 0.8rem; color: #5b4560; border-top: 1px solid rgba(42,24,48,0.15); padding-top: 0.9rem; margin-top: 1.5rem; }
+
+.site-footer {
+    margin-top: 3rem; padding-top: 1.6rem; border-top: 1px solid rgba(42,24,48,0.16);
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.site-footer .footer-links { display: flex; gap: 1.4rem; flex-wrap: wrap; font-family: 'Roboto Condensed', sans-serif; font-size: 0.85rem; }
+.site-footer .footer-meta { display: flex; align-items: center; gap: 0.9rem; font-family: 'Roboto Condensed', sans-serif; font-size: 0.85rem; color: #5b4560; flex-wrap: wrap; }
+.site-footer .footer-meta a { display: inline-flex; align-items: center; gap: 0.4rem; }
+
+[data-testid="stMetric"] { background: rgba(255,255,255,0.5); padding: 0.75rem 1rem; border-radius: 10px; }
 
 .stButton > button, .stLinkButton > a { border-radius: 999px; font-family: 'Roboto Condensed', sans-serif; font-weight: 600; }
-.stButton > button[kind="primary"] {
-    background: linear-gradient(120deg, #ff8a5c, #ff6a88);
-    border: none;
+.stButton > button[kind="primary"] { background: #221530; color: #fff; border: none; }
+.stButton > button[kind="primary"]:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(34,21,48,0.35); }
+.stButton > button[kind="secondary"], .stLinkButton > a[kind="secondary"] {
+    background: transparent; color: #221530; border: 1px solid rgba(42,24,48,0.3);
 }
-.stButton > button[kind="primary"]:hover { filter: brightness(1.06); }
+.stButton > button[kind="secondary"]:hover, .stLinkButton > a[kind="secondary"]:hover { background: rgba(42,24,48,0.08); }
 
-@media (max-width: 640px) {
-    .hero { padding: 1.5rem; }
+.st-key-preset_chips .stButton > button {
+    background: #5C3D52; border: 1px solid #744F68; color: #FDFBF7;
+    font-size: 0.78rem; padding: 0.3rem 0.7rem;
+}
+.st-key-preset_chips .stButton > button:hover { background: #744F68; }
+
+[data-baseweb="tab-list"] { gap: 6px; }
+[data-baseweb="tab"] {
+    font-family: 'Roboto Condensed', sans-serif !important; font-weight: 600 !important;
+    border-radius: 999px !important; background: #5C3D52 !important; border: 1px solid #744F68 !important;
+    color: #FDFBF7 !important; padding: 0.4rem 0.95rem !important;
+}
+[data-baseweb="tab"][aria-selected="true"] { background: #E07A5F !important; border-color: #E07A5F !important; color: #fff !important; }
+[data-baseweb="tab-highlight"], [data-baseweb="tab-border"] { display: none !important; }
+
+@media (max-width: 768px) {
+    .hero-grid { grid-template-columns: 1fr; }
     .card-grid, .stat-strip, .tech-grid { grid-template-columns: 1fr; }
-    /* st.columns stacks vertically below this width, so the navbar becomes a
-       tall single column; a 999px pill radius on something that tall reads as
-       a broken oval, so use a normal rounded-rectangle instead. */
-    .st-key-navbar { border-radius: 20px; padding: 0.9rem 1rem; }
+    .st-key-navbar { border-radius: 20px; }
 }
 </style>
 """, unsafe_allow_html=True)
+
+st.markdown(_render_background_decoration(), unsafe_allow_html=True)
 
 
 @st.cache_resource
@@ -300,7 +433,7 @@ def build_graph(triples, max_nodes=None):
 
 
 def render_pyvis_graph(G, highlight=""):
-    net = Network(height="650px", width="100%", directed=True, notebook=False, bgcolor="#0e1117", font_color="white")
+    net = Network(height="650px", width="100%", directed=True, notebook=False, bgcolor="#3E2A38", font_color="white")
 
     highlight = highlight.strip().lower()
     for node, data in G.nodes(data=True):
@@ -343,6 +476,19 @@ def triples_to_dataframe(triples):
     } for t in triples])
 
 
+def render_preset_chips(disabled=False):
+    """Quick-access preset row (mirrors the sidebar list) so the choice is
+    visible without opening the sidebar, especially on mobile."""
+    with st.container(key="preset_chips"):
+        cols = st.columns(len(DISEASE_PRESETS))
+        for col, (label, preset_query) in zip(cols, DISEASE_PRESETS):
+            with col:
+                if st.button(label, key=f"chip_{preset_query}", width="stretch", disabled=disabled):
+                    st.session_state.query = preset_query
+                    st.session_state.page = "Home"
+                    st.rerun()
+
+
 # ---- Sidebar ------------------------------------------------------------
 if "query" not in st.session_state:
     st.session_state.query = DISEASE_PRESETS[0][1]
@@ -350,7 +496,7 @@ if "page" not in st.session_state:
     st.session_state.page = "Home"
 
 with st.sidebar:
-    st.markdown("### 🧠 Explore a disease")
+    st.markdown("### Explore a disease")
     for label, preset_query in DISEASE_PRESETS:
         if st.button(label, key=preset_query, width="stretch"):
             st.session_state.query = preset_query
@@ -376,11 +522,14 @@ with st.sidebar:
 
 # ---- Top nav --------------------------------------------------------------
 with st.container(key="navbar"):
-    nav_brand, nav_home, nav_components, nav_spacer, nav_source = st.columns(
-        [2.4, 0.9, 1.3, 2.4, 1.5], vertical_alignment="center"
+    nav_logo, nav_brand, nav_home, nav_components, nav_spacer, nav_source = st.columns(
+        [0.4, 1.6, 0.9, 1.3, 2.0, 1.5], vertical_alignment="center"
     )
+    with nav_logo:
+        st.markdown(LOGO_SVG, unsafe_allow_html=True)
     with nav_brand:
-        st.markdown('<div class="topnav-brand">NeuroLoom</div>', unsafe_allow_html=True)
+        st.markdown('<div class="topnav-brand"><span class="neuro">Neuro</span><span class="loom">Loom</span></div>',
+                    unsafe_allow_html=True)
     with nav_home:
         if st.button("Home", key="nav_home",
                       type="primary" if st.session_state.page == "Home" else "secondary",
@@ -400,40 +549,51 @@ with st.container(key="navbar"):
 # HOME PAGE
 # =====================================================================
 if st.session_state.page == "Home":
-    st.markdown("""
-    <div class="hero">
-      <h1>See what decades of neurodegenerative disease research actually say</h1>
-      <p class="subhead">Pick a disease and watch years of scattered research turn into one
-      graph you can actually explore, built straight from PubMed abstracts and active
-      clinical trials instead of a pile of browser tabs you'll never finish reading.</p>
-    </div>
-    """, unsafe_allow_html=True)
+    hero_text, hero_preview = st.columns([1.15, 1], gap="large")
+    with hero_text:
+        st.markdown("""
+        <div class="hero-grid" style="grid-template-columns:1fr;margin:0">
+          <div>
+            <h1>See what decades of neurodegenerative disease research actually say</h1>
+            <p class="subhead">Pick a disease and watch years of scattered research turn into one
+            graph you can actually explore, built straight from PubMed abstracts and active
+            clinical trials instead of a pile of browser tabs you'll never finish reading.</p>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+        b1, b2 = st.columns(2)
+        with b1:
+            build_clicked = st.button("Build the graph", type="primary", width="stretch")
+        with b2:
+            if st.button("Learn more", type="secondary", width="stretch"):
+                st.session_state.page = "Components"
+                st.rerun()
+    with hero_preview:
+        st.markdown(f"""
+        <div class="dark-panel">
+          <div style="font-family:'Roboto Condensed',sans-serif;font-size:0.72rem;letter-spacing:0.08em;
+               text-transform:uppercase;color:#FDFBF7;opacity:0.8;margin-bottom:0.6rem">Alzheimer's disease &middot; live graph</div>
+          {HERO_GRAPH_SVG}
+          <div style="font-family:ui-monospace,monospace;font-size:0.7rem;color:#d8c7d3;margin-top:0.4rem">
+          example relationships &mdash; click Build below for the real thing</div>
+        </div>
+        """, unsafe_allow_html=True)
 
     st.markdown(
         '<div class="badge-row">' + "".join(
-            f'<span class="trust-badge">{svg_icon(path)}{label}</span>'
-            for path, label in TRUST_BADGES
+            f'<span class="trust-badge">{label}</span>' for label in TRUST_BADGES
         ) + '</div>',
         unsafe_allow_html=True,
     )
 
     st.markdown(
         '<div class="card-grid">' + "".join(
-            f'<div class="glass-card"><div class="card-icon">{svg_icon(path, "")}</div>'
+            f'<div class="glass-card"><div class="card-num">{i + 1:02d}</div>'
             f'<div class="card-kicker">{kicker}</div><h4>{title}</h4><p>{body}</p></div>'
-            for path, kicker, title, body in WHY_CARDS
+            for i, (kicker, title, body) in enumerate(WHY_CARDS)
         ) + '</div>',
         unsafe_allow_html=True,
     )
-
-    build_col, badge_col = st.columns([3, 1], vertical_alignment="center")
-    with build_col:
-        build_clicked = st.button("🕸️ Build the graph", type="primary")
-    with badge_col:
-        st.markdown(
-            '<div class="fun-badge"><span class="fun-badge-big">⚡</span>usually<br>~10 sec</div>',
-            unsafe_allow_html=True,
-        )
 
     if build_clicked:
         with st.spinner("Fetching abstracts, trials, and context..."):
@@ -457,94 +617,111 @@ if st.session_state.page == "Home":
 
     result = st.session_state.get("last_result")
 
-    if not result:
-        st.info("Pick a disease from the sidebar, or type your own search, then hit build above.")
-    else:
-        abstracts = result["pubmed_result"]["abstracts"]
-        pubmed_total = result["pubmed_result"]["total_count"]
-        trials = result["trials_result"]["trials"]
-        trials_total = result["trials_result"]["total_count"]
-        wiki = result["wiki"]
+    with st.container(key="explorer_panel"):
+        st.markdown('<div class="dark-panel">', unsafe_allow_html=True)
+        kicker = "Your results" if result else "Explorer preview"
+        st.markdown(f'<div class="panel-kicker">{kicker}</div>', unsafe_allow_html=True)
 
-        st.markdown(f"""
-        <div class="stat-strip">
-          <div class="stat-box"><div class="stat-num">{format_count_plus(pubmed_total)}</div>
-            <div class="stat-label">PubMed records matching "{result['query']}"</div></div>
-          <div class="stat-box"><div class="stat-num">{format_count_plus(trials_total)}</div>
-            <div class="stat-label">Registered clinical trials matching this search</div></div>
-          <div class="stat-box"><div class="stat-num">{len(abstracts)}</div>
-            <div class="stat-label">Abstracts analyzed in depth for this graph</div></div>
-        </div>
-        """, unsafe_allow_html=True)
+        render_preset_chips()
 
-        if wiki:
-            with st.container():
-                st.markdown(f"**{wiki['title']}.** {wiki['extract']}  \n[Read more]({wiki['url']})")
-
-        if not abstracts:
-            st.warning("No abstracts found for this search term. Try a different query.")
-        else:
-            all_triples = []
-            for a in abstracts:
-                all_triples.extend(extract_triples(a["abstract"], nlp, source_id=a["pmid"]))
-
-            if hide_negated:
-                all_triples = [t for t in all_triples if not t["negated"]]
-
-            G = build_graph(all_triples, max_nodes=max_nodes)
-
-            m1, m2, m3, m4 = st.columns(4)
-            m1.metric("Abstracts pulled", len(abstracts))
-            m2.metric("Entities in graph", G.number_of_nodes())
-            m3.metric("Relationships", G.number_of_edges())
-            m4.metric("Active trials shown", len(trials))
-
+        if not result:
             st.markdown(
-                "".join(
-                    f"<span class='legend-chip' style='background:{color}'>{etype.replace('_',' ').title()}</span>"
-                    for etype, color in ENTITY_COLORS.items() if etype != "OTHER"
-                ),
+                '<div class="mono-note" style="margin-top:1rem">Pick a disease above or in the '
+                'sidebar, then click Build the graph. Live PubMed counts, extracted relationships, '
+                'clinical trials, and source abstracts will render here.</div>',
                 unsafe_allow_html=True,
             )
+        else:
+            abstracts = result["pubmed_result"]["abstracts"]
+            pubmed_total = result["pubmed_result"]["total_count"]
+            trials = result["trials_result"]["trials"]
+            trials_total = result["trials_result"]["total_count"]
+            wiki = result["wiki"]
 
-            tab_graph, tab_table, tab_trials, tab_sources = st.tabs(
-                ["🕸️ Graph", "📋 Relationships", "🧪 Clinical trials", "📚 Sources"]
-            )
+            st.markdown(f"""
+            <div class="stat-strip" style="margin-top:1rem">
+              <div class="stat-box"><div class="stat-num">{format_count_plus(pubmed_total)}</div>
+                <div class="stat-label">PubMed records matching "{result['query']}"</div></div>
+              <div class="stat-box"><div class="stat-num">{format_count_plus(trials_total)}</div>
+                <div class="stat-label">Registered clinical trials matching this search</div></div>
+              <div class="stat-box"><div class="stat-num">{len(abstracts)}</div>
+                <div class="stat-label">Abstracts analyzed in depth for this graph</div></div>
+            </div>
+            """, unsafe_allow_html=True)
 
-            with tab_graph:
-                highlight = st.text_input("Highlight a node (e.g. 'tau')", "")
-                if G.number_of_nodes() == 0:
-                    st.warning("No relationships were extracted from these abstracts. Try another topic.")
-                else:
-                    render_pyvis_graph(G, highlight=highlight)
+            if wiki:
+                st.markdown(
+                    f'<div class="wiki-blurb"><strong>{wiki["title"]}.</strong> {wiki["extract"]} '
+                    f'<a href="{wiki["url"]}" target="_blank">Read more</a></div>',
+                    unsafe_allow_html=True,
+                )
 
-            with tab_table:
-                df = triples_to_dataframe(all_triples)
-                st.dataframe(df, width="stretch", hide_index=True)
-
-                csv_buf = io.StringIO()
-                df.to_csv(csv_buf, index=False)
-                graphml_str = "\n".join(nx.generate_graphml(G))
-                c1, c2 = st.columns(2)
-                c1.download_button("Download relationships (CSV)", csv_buf.getvalue(),
-                                    file_name="relationships.csv", mime="text/csv")
-                c2.download_button("Download graph (GraphML)", graphml_str,
-                                    file_name="graph.graphml", mime="application/xml")
-
-            with tab_trials:
-                if not trials:
-                    st.info("No active trials found, or trial lookup was disabled.")
-                else:
-                    st.caption(f"Showing {len(trials)} of {format_count_plus(trials_total)} matching registered studies.")
-                    st.dataframe(pd.DataFrame(trials), width="stretch", hide_index=True,
-                                 column_config={"url": st.column_config.LinkColumn("Link")})
-
-            with tab_sources:
+            if not abstracts:
+                st.warning("No abstracts found for this search term. Try a different query.")
+            else:
+                all_triples = []
                 for a in abstracts:
-                    with st.expander(f"{a['title']} (PMID {a['pmid']})"):
-                        st.write(a["abstract"])
-                        if a["pmid"]:
-                            st.markdown(f"[View on PubMed](https://pubmed.ncbi.nlm.nih.gov/{a['pmid']}/)")
+                    all_triples.extend(extract_triples(a["abstract"], nlp, source_id=a["pmid"]))
+
+                if hide_negated:
+                    all_triples = [t for t in all_triples if not t["negated"]]
+
+                G = build_graph(all_triples, max_nodes=max_nodes)
+
+                m1, m2, m3, m4 = st.columns(4)
+                m1.metric("Abstracts pulled", len(abstracts))
+                m2.metric("Entities in graph", G.number_of_nodes())
+                m3.metric("Relationships", G.number_of_edges())
+                m4.metric("Active trials shown", len(trials))
+
+                st.markdown(
+                    "".join(
+                        f"<span class='legend-chip' style='background:{color}'>{etype.replace('_',' ').title()}</span>"
+                        for etype, color in ENTITY_COLORS.items() if etype != "OTHER"
+                    ),
+                    unsafe_allow_html=True,
+                )
+
+                tab_graph, tab_table, tab_trials, tab_sources = st.tabs(
+                    ["Graph", "Relationships", "Clinical trials", "Sources"]
+                )
+
+                with tab_graph:
+                    highlight = st.text_input("Highlight a node (e.g. 'tau')", "")
+                    if G.number_of_nodes() == 0:
+                        st.warning("No relationships were extracted from these abstracts. Try another topic.")
+                    else:
+                        render_pyvis_graph(G, highlight=highlight)
+
+                with tab_table:
+                    df = triples_to_dataframe(all_triples)
+                    st.dataframe(df, width="stretch", hide_index=True)
+
+                    csv_buf = io.StringIO()
+                    df.to_csv(csv_buf, index=False)
+                    graphml_str = "\n".join(nx.generate_graphml(G))
+                    c1, c2 = st.columns(2)
+                    c1.download_button("Download relationships (CSV)", csv_buf.getvalue(),
+                                        file_name="relationships.csv", mime="text/csv")
+                    c2.download_button("Download graph (GraphML)", graphml_str,
+                                        file_name="graph.graphml", mime="application/xml")
+
+                with tab_trials:
+                    if not trials:
+                        st.info("No active trials found, or trial lookup was disabled.")
+                    else:
+                        st.caption(f"Showing {len(trials)} of {format_count_plus(trials_total)} matching registered studies.")
+                        st.dataframe(pd.DataFrame(trials), width="stretch", hide_index=True,
+                                     column_config={"url": st.column_config.LinkColumn("Link")})
+
+                with tab_sources:
+                    for a in abstracts:
+                        with st.expander(f"{a['title']} (PMID {a['pmid']})"):
+                            st.write(a["abstract"])
+                            if a["pmid"]:
+                                st.markdown(f"[View on PubMed](https://pubmed.ncbi.nlm.nih.gov/{a['pmid']}/)")
+
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # =====================================================================
 # COMPONENTS PAGE
@@ -557,27 +734,27 @@ else:
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="section-kicker" style="color:#ffb385;">The pipeline</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker" style="color:#a4487f;">The pipeline &mdash; scroll to reveal</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="card-grid">' + "".join(
-            f'<div class="glass-card"><div class="card-icon{" teal" if i % 2 else ""}">{num}</div>'
+            f'<div class="glass-card pipeline-card"><div class="card-num {"cool" if i % 2 else "warm"}">{num}</div>'
             f'<h4>{title}</h4><p>{desc}</p></div>'
             for i, (num, title, desc) in enumerate(PIPELINE_STEPS)
         ) + '</div>',
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="section-kicker" style="color:#8fe9dc;">Built with</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker" style="color:#7a3f8f;">Built with</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="tech-grid">' + "".join(
-            f'<div class="tech-card{" teal" if i % 2 else ""}"><div class="tech-name">{name}</div>'
+            f'<div class="tech-card {"cool" if i % 2 else "warm"}"><div class="tech-name">{name}</div>'
             f'<div class="tech-role">{role}</div></div>'
             for i, (name, role) in enumerate(TECH_STACK)
         ) + '</div>',
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="section-kicker" style="color:#ffb385;">Where the data comes from</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker" style="color:#a4487f;">Where the data comes from</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="card-grid">' + "".join(
             f'<div class="glass-card"><h4>{name}</h4><p>{desc}</p>'
@@ -597,3 +774,19 @@ else:
         "trusting a claim.</div>",
         unsafe_allow_html=True,
     )
+
+# ---- Footer (both pages) --------------------------------------------------
+st.markdown(f"""
+<div class="site-footer">
+  <div class="footer-links">
+    <a href="https://github.com/lmarshall-boop/Knowledge-Graph" target="_blank">GitHub</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank">PubMed</a>
+    <a href="https://clinicaltrials.gov/" target="_blank">ClinicalTrials.gov</a>
+    <a href="https://en.wikipedia.org/api/rest_v1/" target="_blank">Wikipedia API</a>
+  </div>
+  <div class="footer-meta">
+    <span>&copy; 2026 NeuroLoom &middot; research exploration, not medical advice</span>
+    <a href="https://instagram.com/lianali4na" target="_blank">{INSTAGRAM_SVG}@lianali4na</a>
+  </div>
+</div>
+""", unsafe_allow_html=True)
