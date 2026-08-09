@@ -119,12 +119,12 @@ HERO_GRAPH_SVG = """<svg viewBox="0 0 400 250" style="width:100%;display:block">
   <circle cx="300" cy="150" r="8" fill="#d9b45c"/>
   <circle cx="120" cy="205" r="8" fill="#b38ce8"/>
   <circle cx="340" cy="215" r="8" fill="#7fd18f"/>
-  <text x="70" y="42" fill="#FDFBF7" font-size="10" font-family="Roboto Condensed" text-anchor="middle">amyloid-beta</text>
-  <text x="260" y="30" fill="#FDFBF7" font-size="10" font-family="Roboto Condensed" text-anchor="middle">alzheimer's disease</text>
-  <text x="180" y="140" fill="#FDFBF7" font-size="10" font-family="Roboto Condensed" text-anchor="middle">neuroinflammation</text>
-  <text x="300" y="135" fill="#FDFBF7" font-size="10" font-family="Roboto Condensed" text-anchor="middle">hippocampus</text>
-  <text x="120" y="222" fill="#FDFBF7" font-size="10" font-family="Roboto Condensed" text-anchor="middle">apoptosis</text>
-  <text x="340" y="232" fill="#FDFBF7" font-size="10" font-family="Roboto Condensed" text-anchor="middle">donepezil</text>
+  <text x="70" y="42" fill="#EBE4EC" font-size="10" font-family="Roboto Condensed" text-anchor="middle">amyloid-beta</text>
+  <text x="260" y="30" fill="#EBE4EC" font-size="10" font-family="Roboto Condensed" text-anchor="middle">alzheimer's disease</text>
+  <text x="180" y="140" fill="#EBE4EC" font-size="10" font-family="Roboto Condensed" text-anchor="middle">neuroinflammation</text>
+  <text x="300" y="135" fill="#EBE4EC" font-size="10" font-family="Roboto Condensed" text-anchor="middle">hippocampus</text>
+  <text x="120" y="222" fill="#EBE4EC" font-size="10" font-family="Roboto Condensed" text-anchor="middle">apoptosis</text>
+  <text x="340" y="232" fill="#EBE4EC" font-size="10" font-family="Roboto Condensed" text-anchor="middle">donepezil</text>
 </svg>"""
 
 
@@ -148,7 +148,7 @@ def _mulberry32(seed):
 
 def _build_neuron_field():
     rand = _mulberry32(7)
-    node_colors = ["#7a3f8f", "#a4487f", "#E07A5F", "#c9558f"]
+    node_colors = ["#7a3f8f", "#a4487f", "#E88977", "#c9558f"]
     nodes = []
     for _ in range(28):
         nodes.append({
@@ -189,21 +189,26 @@ def _render_background_decoration():
     # the initial containing block instead means this covers a fixed span of the
     # page (~2400px) rather than dynamically matching exact content height, which
     # is an acceptable tradeoff for a low-opacity decorative layer.
+    #
+    # No overflow:hidden here: Streamlit's own root already clips horizontal
+    # overflow, and adding a second, narrower clip boundary on this wrapper cut
+    # the intentionally-oversized blob/spiral off with a visible hard edge
+    # partway across the page instead of letting them fade out at the true edge.
     return f"""
-    <div style="position:absolute;top:0;left:0;width:100%;height:2400px;pointer-events:none;z-index:0;overflow:hidden">
-      <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.14"
+    <div style="position:absolute;top:0;left:0;width:100%;height:2400px;pointer-events:none;z-index:0">
+      <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.16"
            viewBox="0 0 1200 1400" preserveAspectRatio="xMidYMid slice">{lines_svg}{nodes_svg}</svg>
       <div style="position:absolute;top:-220px;right:-220px;width:620px;height:620px;border-radius:50%;
-           background:radial-gradient(circle,rgba(255,157,92,0.4),transparent 70%);filter:blur(18px);
+           background:radial-gradient(circle,rgba(232,137,119,0.35),transparent 70%);filter:blur(18px);
            animation:blobDrift 14s ease-in-out infinite"></div>
       <svg style="position:absolute;bottom:-160px;left:-160px;width:640px;height:640px" viewBox="0 0 640 640">
         <defs><linearGradient id="loopGrad" x1="0" y1="1" x2="1" y2="0">
-          <stop offset="0" stop-color="#3f1f4a"/><stop offset="0.4" stop-color="#a13f7a"/>
-          <stop offset="0.75" stop-color="#ec6f6f"/><stop offset="1" stop-color="#ff9d5c"/>
+          <stop offset="0" stop-color="#150F18"/><stop offset="0.4" stop-color="#5c3357"/>
+          <stop offset="0.75" stop-color="#c9558f"/><stop offset="1" stop-color="#E88977"/>
         </linearGradient></defs>
         {rings_svg}
-        <path d="M60 580 L60 480 M60 580 L140 520 M60 580 L20 490" stroke="#fff" stroke-width="1.4" opacity="0.5" fill="none"/>
-        <circle cx="60" cy="580" r="10" fill="#fff" opacity="0.8"/>
+        <path d="M60 580 L60 480 M60 580 L140 520 M60 580 L20 490" stroke="#EBE4EC" stroke-width="1.4" opacity="0.5" fill="none"/>
+        <circle cx="60" cy="580" r="10" fill="#EBE4EC" opacity="0.8"/>
       </svg>
     </div>
     """
@@ -221,9 +226,23 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=Roboto+Condensed:wght@400;500;600;700&display=swap');
 
+:root {
+    /* Deep Aubergine palette -- swap these six values to retheme the whole app. */
+    --bg: #150F18;
+    --panel: #221826;       /* sidebar, nav */
+    --card: #312336;        /* cards, graph box */
+    --card-nested: #3d2b42; /* chips/stat-boxes sitting inside a dark-panel */
+    --text-primary: #EBE4EC;
+    --text-secondary: #A394A6;
+    --accent: #E88977;
+    --accent-deep: #c96a58;
+    --border: rgba(235,228,236,0.14);
+    --border-soft: rgba(235,228,236,0.12);
+}
+
 html, body, .stApp { font-family: 'Inter', sans-serif; }
-a { color: #a4487f; text-decoration: none; }
-a:hover { color: #c9558f; text-decoration: underline; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: #f0a494; text-decoration: underline; }
 
 @keyframes blobDrift {
     0% { transform: translate(0,0) scale(1); }
@@ -232,73 +251,85 @@ a:hover { color: #c9558f; text-decoration: underline; }
 }
 
 .stApp {
-    background: linear-gradient(135deg, #fdf3ea 0%, #fbe1d5 45%, #ffd7bd 100%);
+    background: linear-gradient(160deg, var(--bg) 0%, #1c1420 100%);
 }
 
-[data-testid="stSidebar"] { background: #fbe9df; }
-[data-testid="stSidebar"] * { color: #2a1830; }
-[data-testid="stSidebar"] .disclaimer { color: #6b5566 !important; }
+[data-testid="stSidebar"] { background: var(--panel); }
+[data-testid="stSidebar"] * { color: var(--text-primary); }
+[data-testid="stSidebar"] .disclaimer { color: var(--text-secondary) !important; }
+
+/* Native text inputs don't automatically follow this page's custom palette --
+   without this, they fall back to the browser/Streamlit-theme default, which
+   can render as illegible dark-on-dark if the viewer's system is already in
+   dark mode. Forced explicitly so it never depends on config.toml alone. */
+.stTextInput input, .stTextArea textarea, .stNumberInput input {
+    background-color: var(--panel) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border) !important;
+}
+.stTextInput input::placeholder, .stTextArea textarea::placeholder { color: var(--text-secondary) !important; }
 
 .st-key-navbar {
-    background: rgba(255,255,255,0.55); backdrop-filter: blur(8px);
-    border: 1px solid rgba(42,24,48,0.14); border-radius: 999px;
+    background: rgba(34,24,38,0.75); backdrop-filter: blur(8px);
+    border: 1px solid var(--border); border-radius: 999px;
     padding: 0.5rem 0.9rem; margin: 0.5rem 0 1.75rem;
 }
 .topnav-brand { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.35rem; letter-spacing: -0.02em; }
-.topnav-brand .neuro { color: #221530; }
+.topnav-brand .neuro { color: var(--text-primary); }
 .topnav-brand .loom {
-    background: linear-gradient(120deg, #c9558f, #7a3f8f);
+    background: linear-gradient(120deg, var(--accent), var(--accent-deep));
     -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 
 .hero-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 2rem; align-items: center; margin: 1rem 0 2rem; }
 .hero-grid h1 {
     margin: 0; font-family: 'Inter', sans-serif; font-weight: 800;
-    font-size: clamp(1.9rem, 3.6vw, 2.7rem); line-height: 1.14; letter-spacing: -0.02em; color: #221530;
+    font-size: clamp(1.9rem, 3.6vw, 2.7rem); line-height: 1.14; letter-spacing: -0.02em; color: var(--text-primary);
 }
-.hero-grid p.subhead { margin: 1.1rem 0 0; font-size: 1.02rem; line-height: 1.62; color: #4a3550; max-width: 36rem; }
+.hero-grid p.subhead { margin: 1.1rem 0 0; font-size: 1.02rem; line-height: 1.62; color: var(--text-secondary); max-width: 36rem; }
 
 .dark-panel {
-    background: #4A3043; border: 1px solid #744F68; border-radius: 22px;
-    padding: 1.4rem; box-shadow: 0 10px 18px rgba(42,24,48,0.32);
+    background: var(--card); border: 1px solid var(--border); border-radius: 22px;
+    padding: 1.4rem; box-shadow: 0 10px 18px rgba(0,0,0,0.35);
 }
 .dark-panel .panel-kicker {
     font-family: 'Roboto Condensed', sans-serif; font-size: 0.75rem; letter-spacing: 0.08em;
-    text-transform: uppercase; color: #E07A5F; margin-bottom: 0.7rem;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 0.7rem;
 }
 
 .badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.8rem 0 1.6rem; }
 .trust-badge {
     font-family: 'Roboto Condensed', sans-serif;
-    background: rgba(255,255,255,0.6); border: 1px solid rgba(42,24,48,0.15);
-    color: #2a1830; padding: 0.32rem 0.85rem; border-radius: 999px; font-size: 0.8rem; white-space: nowrap;
+    background: rgba(49,35,54,0.6); border: 1px solid var(--border-soft);
+    color: var(--text-primary); padding: 0.32rem 0.85rem; border-radius: 999px; font-size: 0.8rem; white-space: nowrap;
 }
 
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin-bottom: 1.8rem; }
 .glass-card {
-    background: rgba(255,255,255,0.6); backdrop-filter: blur(6px);
-    border: 1px solid rgba(42,24,48,0.12); border-radius: 16px; padding: 1.2rem 1.3rem;
+    background: rgba(49,35,54,0.6); backdrop-filter: blur(6px);
+    border: 1px solid var(--border-soft); border-radius: 16px; padding: 1.2rem 1.3rem;
 }
 .card-num {
-    width: 38px; height: 38px; border-radius: 50%; background: rgba(122,63,143,0.12);
-    border: 1px solid rgba(122,63,143,0.2); display: flex; align-items: center; justify-content: center;
-    font-family: 'Roboto Condensed', sans-serif; font-weight: 700; font-size: 0.95rem; color: #7a3f8f;
+    width: 38px; height: 38px; border-radius: 50%; background: rgba(232,137,119,0.14);
+    border: 1px solid rgba(232,137,119,0.28); display: flex; align-items: center; justify-content: center;
+    font-family: 'Roboto Condensed', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent);
     margin-bottom: 0.7rem;
 }
-.card-num.cool { background: rgba(122,63,143,0.14); color: #7a3f8f; }
-.card-num.warm { background: rgba(164,72,127,0.14); color: #a4487f; }
-.glass-card .card-kicker { font-family: 'Poppins', sans-serif; font-size: 0.76rem; font-weight: 600; color: #a4487f; }
-.glass-card h4 { font-family: 'Poppins', sans-serif; margin: 0.35rem 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #221530; }
-.glass-card p { margin: 0; font-size: 0.9rem; color: #4a3550; line-height: 1.55; }
+.card-num.cool { background: rgba(163,148,166,0.14); border-color: rgba(163,148,166,0.28); color: var(--text-secondary); }
+.card-num.warm { background: rgba(232,137,119,0.14); border-color: rgba(232,137,119,0.28); color: var(--accent); }
+.glass-card .card-kicker { font-family: 'Poppins', sans-serif; font-size: 0.76rem; font-weight: 600; color: var(--accent); }
+.glass-card h4 { font-family: 'Poppins', sans-serif; margin: 0.35rem 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: var(--text-primary); }
+.glass-card p { margin: 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.55; }
+.glass-card a { color: var(--accent); }
 
 .preset-chip {
     font-family: 'Roboto Condensed', sans-serif; font-size: 0.76rem;
-    background: #5C3D52; border: 1px solid #744F68; border-radius: 999px;
-    padding: 0.3rem 0.75rem; color: #FDFBF7;
+    background: var(--card-nested); border: 1px solid var(--border);
+    padding: 0.3rem 0.75rem; color: var(--text-primary);
 }
-.stat-box { background: #5C3D52; border: 1px solid #744F68; border-radius: 14px; padding: 0.85rem 1rem; }
-.stat-box .stat-num { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: #E07A5F; }
-.stat-box .stat-label { font-family: 'Roboto Condensed', sans-serif; font-size: 0.76rem; color: #FDFBF7; opacity: 0.82; margin-top: 0.2rem; }
+.stat-box { background: var(--card-nested); border: 1px solid var(--border); border-radius: 14px; padding: 0.85rem 1rem; }
+.stat-box .stat-num { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+.stat-box .stat-label { font-family: 'Roboto Condensed', sans-serif; font-size: 0.76rem; color: var(--text-primary); opacity: 0.82; margin-top: 0.2rem; }
 .stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.75rem; margin-bottom: 1.2rem; }
 
 .legend-chip {
@@ -307,24 +338,24 @@ a:hover { color: #c9558f; text-decoration: underline; }
     color: #1a1420; font-size: 0.78rem; margin-right: 0.4rem; margin-bottom: 0.3rem;
 }
 .mono-note {
-    background: #3E2A38; border: 1px solid #744F68; border-radius: 14px; padding: 0.9rem 1.1rem;
-    font-family: ui-monospace, monospace; font-size: 0.78rem; color: #d8c7d3;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 0.9rem 1.1rem;
+    font-family: ui-monospace, monospace; font-size: 0.78rem; color: var(--text-secondary);
 }
-.dark-panel .wiki-blurb { color: #f1e6ee; font-size: 0.92rem; line-height: 1.55; margin-bottom: 1.1rem; }
-.dark-panel .wiki-blurb a { color: #ffb385; }
+.dark-panel .wiki-blurb { color: var(--text-primary); font-size: 0.92rem; line-height: 1.55; margin-bottom: 1.1rem; }
+.dark-panel .wiki-blurb a { color: var(--accent); }
 
 .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.75rem; margin-bottom: 2rem; }
 .tech-card {
-    background: rgba(255,255,255,0.6); border: 1px solid rgba(42,24,48,0.12); border-radius: 12px;
+    background: rgba(49,35,54,0.6); border: 1px solid var(--border-soft); border-radius: 12px;
     padding: 0.8rem 1rem;
 }
-.tech-card.warm { border-left: 3px solid #a4487f; }
-.tech-card.cool { border-left: 3px solid #7a3f8f; }
-.tech-card .tech-name { font-family: 'Poppins', sans-serif; font-weight: 700; color: #221530; font-size: 0.92rem; }
-.tech-card .tech-role { font-size: 0.8rem; color: #4a3550; margin-top: 0.2rem; line-height: 1.4; }
+.tech-card.warm { border-left: 3px solid var(--accent); }
+.tech-card.cool { border-left: 3px solid var(--text-secondary); }
+.tech-card .tech-name { font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--text-primary); font-size: 0.92rem; }
+.tech-card .tech-role { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem; line-height: 1.4; }
 
-.page-title { font-family: 'Poppins', sans-serif; font-weight: 800; color: #221530; font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 1rem 0 0.4rem; letter-spacing: -0.02em; }
-.page-subtitle { color: #4a3550; font-size: 0.95rem; max-width: 46rem; margin-bottom: 1.8rem; }
+.page-title { font-family: 'Poppins', sans-serif; font-weight: 800; color: var(--text-primary); font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 1rem 0 0.4rem; letter-spacing: -0.02em; }
+.page-subtitle { color: var(--text-secondary); font-size: 0.95rem; max-width: 46rem; margin-bottom: 1.8rem; }
 .section-kicker { font-family: 'Poppins', sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 0.7rem; }
 
 .pipeline-card { opacity: 1; transform: translateY(0); }
@@ -340,39 +371,41 @@ a:hover { color: #c9558f; text-decoration: underline; }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.disclaimer { font-size: 0.8rem; color: #5b4560; border-top: 1px solid rgba(42,24,48,0.15); padding-top: 0.9rem; margin-top: 1.5rem; }
+.disclaimer { font-size: 0.8rem; color: var(--text-secondary); border-top: 1px solid var(--border); padding-top: 0.9rem; margin-top: 1.5rem; }
 
 .site-footer {
-    margin-top: 3rem; padding-top: 1.6rem; border-top: 1px solid rgba(42,24,48,0.16);
+    margin-top: 3rem; padding-top: 1.6rem; border-top: 1px solid var(--border);
     display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
 }
 .site-footer .footer-links { display: flex; gap: 1.4rem; flex-wrap: wrap; font-family: 'Roboto Condensed', sans-serif; font-size: 0.85rem; }
-.site-footer .footer-meta { display: flex; align-items: center; gap: 0.9rem; font-family: 'Roboto Condensed', sans-serif; font-size: 0.85rem; color: #5b4560; flex-wrap: wrap; }
+.site-footer .footer-meta { display: flex; align-items: center; gap: 0.9rem; font-family: 'Roboto Condensed', sans-serif; font-size: 0.85rem; color: var(--text-secondary); flex-wrap: wrap; }
 .site-footer .footer-meta a { display: inline-flex; align-items: center; gap: 0.4rem; }
 
-[data-testid="stMetric"] { background: rgba(255,255,255,0.5); padding: 0.75rem 1rem; border-radius: 10px; }
+[data-testid="stMetric"] { background: rgba(235,228,236,0.06); padding: 0.75rem 1rem; border-radius: 10px; }
+[data-testid="stMetricValue"] { color: var(--text-primary) !important; }
+[data-testid="stMetricLabel"] { color: var(--text-secondary) !important; }
 
 .stButton > button, .stLinkButton > a { border-radius: 999px; font-family: 'Roboto Condensed', sans-serif; font-weight: 600; }
-.stButton > button[kind="primary"] { background: #221530; color: #fff; border: none; }
-.stButton > button[kind="primary"]:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(34,21,48,0.35); }
+.stButton > button[kind="primary"] { background: var(--accent); color: var(--bg); border: none; }
+.stButton > button[kind="primary"]:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(232,137,119,0.35); }
 .stButton > button[kind="secondary"], .stLinkButton > a[kind="secondary"] {
-    background: transparent; color: #221530; border: 1px solid rgba(42,24,48,0.3);
+    background: transparent; color: var(--text-primary); border: 1px solid var(--border);
 }
-.stButton > button[kind="secondary"]:hover, .stLinkButton > a[kind="secondary"]:hover { background: rgba(42,24,48,0.08); }
+.stButton > button[kind="secondary"]:hover, .stLinkButton > a[kind="secondary"]:hover { background: rgba(235,228,236,0.08); }
 
 .st-key-preset_chips .stButton > button {
-    background: #5C3D52; border: 1px solid #744F68; color: #FDFBF7;
+    background: var(--card-nested); border: 1px solid var(--border); color: var(--text-primary);
     font-size: 0.78rem; padding: 0.3rem 0.7rem;
 }
-.st-key-preset_chips .stButton > button:hover { background: #744F68; }
+.st-key-preset_chips .stButton > button:hover { background: #4a3550; }
 
 [data-baseweb="tab-list"] { gap: 6px; }
 [data-baseweb="tab"] {
     font-family: 'Roboto Condensed', sans-serif !important; font-weight: 600 !important;
-    border-radius: 999px !important; background: #5C3D52 !important; border: 1px solid #744F68 !important;
-    color: #FDFBF7 !important; padding: 0.4rem 0.95rem !important;
+    border-radius: 999px !important; background: var(--card-nested) !important; border: 1px solid var(--border) !important;
+    color: var(--text-primary) !important; padding: 0.4rem 0.95rem !important;
 }
-[data-baseweb="tab"][aria-selected="true"] { background: #E07A5F !important; border-color: #E07A5F !important; color: #fff !important; }
+[data-baseweb="tab"][aria-selected="true"] { background: var(--accent) !important; border-color: var(--accent) !important; color: var(--bg) !important; }
 [data-baseweb="tab-highlight"], [data-baseweb="tab-border"] { display: none !important; }
 
 @media (max-width: 768px) {
@@ -433,7 +466,7 @@ def build_graph(triples, max_nodes=None):
 
 
 def render_pyvis_graph(G, highlight=""):
-    net = Network(height="650px", width="100%", directed=True, notebook=False, bgcolor="#3E2A38", font_color="white")
+    net = Network(height="650px", width="100%", directed=True, notebook=False, bgcolor="#312336", font_color="white")
 
     highlight = highlight.strip().lower()
     for node, data in G.nodes(data=True):
@@ -572,9 +605,9 @@ if st.session_state.page == "Home":
         st.markdown(f"""
         <div class="dark-panel">
           <div style="font-family:'Roboto Condensed',sans-serif;font-size:0.72rem;letter-spacing:0.08em;
-               text-transform:uppercase;color:#FDFBF7;opacity:0.8;margin-bottom:0.6rem">Alzheimer's disease &middot; live graph</div>
+               text-transform:uppercase;color:#EBE4EC;opacity:0.8;margin-bottom:0.6rem">Alzheimer's disease &middot; live graph</div>
           {HERO_GRAPH_SVG}
-          <div style="font-family:ui-monospace,monospace;font-size:0.7rem;color:#d8c7d3;margin-top:0.4rem">
+          <div style="font-family:ui-monospace,monospace;font-size:0.7rem;color:#A394A6;margin-top:0.4rem">
           example relationships &mdash; click Build below for the real thing</div>
         </div>
         """, unsafe_allow_html=True)
@@ -734,7 +767,7 @@ else:
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="section-kicker" style="color:#a4487f;">The pipeline &mdash; scroll to reveal</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker" style="color:#E88977;">The pipeline &mdash; scroll to reveal</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="card-grid">' + "".join(
             f'<div class="glass-card pipeline-card"><div class="card-num {"cool" if i % 2 else "warm"}">{num}</div>'
@@ -744,7 +777,7 @@ else:
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="section-kicker" style="color:#7a3f8f;">Built with</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker" style="color:#A394A6;">Built with</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="tech-grid">' + "".join(
             f'<div class="tech-card {"cool" if i % 2 else "warm"}"><div class="tech-name">{name}</div>'
@@ -754,7 +787,7 @@ else:
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="section-kicker" style="color:#a4487f;">Where the data comes from</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-kicker" style="color:#E88977;">Where the data comes from</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="card-grid">' + "".join(
             f'<div class="glass-card"><h4>{name}</h4><p>{desc}</p>'
